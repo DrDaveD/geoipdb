@@ -40,4 +40,12 @@ jobs:
 
             - name: Apply corrections
               run: |
+                set -e
                 mmdb-editor/bin/mmdb-editor* -d corrections.json -i city-lite-base.mmdb -o city-lite.mmdb
+                gzip city-lite.mmdb
+
+            - name: Upload artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: city-lite
+                path: city-lite.mmdb.gz
