@@ -8,7 +8,7 @@ on:
 jobs:
     publish:
         runs-on: ubuntu-latest
-        if: github.repository == 'openbao/geoipdb'
+        if: github.repository == 'openhtc/geoipdb'
         steps:
             - name: Download artifact from ci
               uses:
