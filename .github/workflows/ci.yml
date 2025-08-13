@@ -1,0 +1,37 @@
+name: ci
+on:
+    pull_request:
+
+jobs:
+    check_corrections:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Fetch deps
+              run: |
+                set -e
+                sudo apt-get -q update
+                sudo apt-get install -y jq golang-go make
+
+            - name: Check corrections.json for syntax errors
+              run: jq . <corrections.json >/dev/null
+
+            - name: Build mmdb-editor
+              run: |
+                set -e
+                git clone https://github.com/iglov/mmdb-editor.git
+                cd mmdb-editor
+                make linux-amd64
+                mv bin/mmdb-editor* ../mmdb-editor
+                cd ..
+
+            - name: Fetch base db
+              run: |
+                set -e
+                gh release download latest -p city-lite-base.mmdb.gz
+                gunzip city-lite-base.mmdb.gz
+
+            - name: Apply corrections
+              run: |
+                ./mmdb-editor -d corrections.json -i city-lite-base.mmdb -o city-lite.mmdb
