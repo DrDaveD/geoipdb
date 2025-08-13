@@ -16,6 +16,7 @@ jobs:
               with:
                 workflow: ci.yml
                 name: city-lite
+                search_artifacts: true
                 path: .
                 workflow_conclusion: success
                 branch: main
