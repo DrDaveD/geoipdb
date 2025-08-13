@@ -14,8 +14,8 @@ jobs:
               uses:
                 dawidd6/action-download-artifact@v11
               with:
-                workflow: ci.yml
-                pr: ${{ github.event.pull_request.number }}
+                workflow_search: true
+                branch: main
                 use_unzip: true
 
             - name: Upload it to release
