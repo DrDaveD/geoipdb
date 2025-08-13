@@ -1,28 +1,30 @@
 name: merge
 
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
-    apply-corrections:
-        uses: ./.github/workflows/apply-corrections.yml
+  apply-corrections:
+    uses: ./.github/workflows/apply-corrections.yml
+    with:
+      upload-db: true
+    secrets: inherit
+
+  release-db:
+    needs:
+      - apply-corrections
+    runs-on: ubuntu-latest
+    if: github.repository == 'openhtc/geoipdb'
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
-            upload-db: true
-        secrets: inherit
+          name: city-lite
 
-    release-db:
-        runs-on: ubuntu-latest
-        if: github.repository == 'openhtc/geoipdb'
-        steps:
-            - name: Download artifact
-              uses: actions/download-artifact@v4
-              with:
-                name: city-lite
-
-            - name: Upload it to release
-              env:
-                GH_TOKEN: ${{ github.token }}
-              run: |
-                gh release upload latest city-lite.mmdb.gz --clobber
+      - name: Upload it to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload latest city-lite.mmdb.gz --clobber
