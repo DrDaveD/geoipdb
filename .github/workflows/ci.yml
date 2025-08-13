@@ -1,8 +1,8 @@
 name: ci
 on:
-    pull_request:
+  pull_request:
 
 jobs:
-    check_corrections:
-       uses: ./.github/workflows/apply-corrections.yml 
-       secrets: inherit
+  check_corrections:
+    uses: ./.github/workflows/apply-corrections.yml 
+    secrets: inherit
