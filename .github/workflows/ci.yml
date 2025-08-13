@@ -28,7 +28,6 @@ jobs:
                 git clone https://github.com/iglov/mmdb-editor.git
                 cd mmdb-editor
                 make linux-amd64
-                mv bin/mmdb-editor* ../mmdb-editor
                 cd ..
 
             - name: Fetch base db
@@ -41,4 +40,4 @@ jobs:
 
             - name: Apply corrections
               run: |
-                ./mmdb-editor -d corrections.json -i city-lite-base.mmdb -o city-lite.mmdb
+                mmdb-editor/bin/mmdb-editor* -d corrections.json -i city-lite-base.mmdb -o city-lite.mmdb
