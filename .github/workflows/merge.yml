@@ -15,11 +15,10 @@ jobs:
                 dawidd6/action-download-artifact@v11
               with:
                 workflow: ci.yml
-                name: city-lite
-                search_artifacts: true
+                pr: ${{ github.event.pull_request.number }}
+                use_unzip: true
                 path: .
                 workflow_conclusion: success
-                branch: main
 
             - name: Upload it to release
               env:
