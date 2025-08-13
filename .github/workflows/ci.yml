@@ -12,10 +12,15 @@ jobs:
               run: |
                 set -e
                 sudo apt-get -q update
-                sudo apt-get install -y jq golang-go make
+                sudo apt-get install -y jq make
 
             - name: Check corrections.json for syntax errors
               run: jq . <corrections.json >/dev/null
+
+            - name: Setup Go
+              uses: actions/setup-go@v2
+              with:
+                go-version: 1.24.6
 
             - name: Build mmdb-editor
               run: |
@@ -23,10 +28,11 @@ jobs:
                 git clone https://github.com/iglov/mmdb-editor.git
                 cd mmdb-editor
                 make linux-amd64
-                mv bin/mmdb-editor* ../mmdb-editor
                 cd ..
 
             - name: Fetch base db
+              env:
+                GH_TOKEN: ${{ github.token }}
               run: |
                 set -e
                 gh release download latest -p city-lite-base.mmdb.gz
@@ -34,4 +40,4 @@ jobs:
 
             - name: Apply corrections
               run: |
-                ./mmdb-editor -d corrections.json -i city-lite-base.mmdb -o city-lite.mmdb
+                mmdb-editor/bin/mmdb-editor* -d corrections.json -i city-lite-base.mmdb -o city-lite.mmdb
