@@ -6,17 +6,20 @@ on:
             - main
 
 jobs:
-    publish:
+    apply-corrections:
+        uses: ./.github/workflows/apply-corrections.yml
+        with:
+            upload-db: true
+        secrets: inherit
+
+    release-db:
         runs-on: ubuntu-latest
         if: github.repository == 'openhtc/geoipdb'
         steps:
-            - name: Download artifact from ci
-              uses:
-                dawidd6/action-download-artifact@v11
+            - name: Download artifact
+              uses: actions/download-artifact@v4
               with:
-                workflow_search: true
-                branch: main
-                use_unzip: true
+                name: city-lite
 
             - name: Upload it to release
               env:
